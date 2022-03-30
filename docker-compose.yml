@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:14
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1556457Mm.
+      POSTGRES_DATABASE: business-project
+    networks:
+      - nested-minds
+networks:
+  nested-minds:

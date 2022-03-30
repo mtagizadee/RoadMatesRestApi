@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  nickname String?
+  email String @unique
+  hash String
+
+  isBanned Boolean @default(false)
+  banReason String?
+
+  publications Publication[]
+  comments Comment[]
+}
+
+model Publication {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiredAt DateTime? 
+
+  from String
+  to String
+  criteria String? 
+  price Float
+
+  authorId Int
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments Comment[]
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  content String
+  
+  authorId Int
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  publicationId Int
+  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade) 
+}
