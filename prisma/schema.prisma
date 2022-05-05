@@ -8,46 +8,61 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt()
 
-  nickname String?
-  email String @unique
-  hash String
+  email    String @unique()
+  password String
 
-  isBanned Boolean @default(false)
-  banReason String?
+  profile Profile?
+}
 
+model Profile {
+  id       Int     @id @default(autoincrement())
+  nickname String
+  avatar   String? @unique
+  balance  Float   @default(0)
+  rating   Float   @default(0)
+
+  userId       Int           @unique
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   publications Publication[]
-  comments Comment[]
+  likes        Like[]
+}
+
+model Code {
+  id        Int      @id @default(autoincrement())
+  expiredAt DateTime
+
+  email       String  @unique
+  code        Int
+  isConfirmed Boolean @default(false)
 }
 
 model Publication {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  expiredAt DateTime? 
+  expiredAt DateTime
 
-  from String
-  to String
-  criteria String? 
-  price Float
+  from           String
+  to             String
+  price          Float   @default(0)
+  criteria       String?
+  additionalInfo String?
 
   authorId Int
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  comments Comment[]
+  author   Profile @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    Like[]
 }
 
-model Comment {
-  id Int @id @default(autoincrement())
+model Like {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  content String
-  
-  authorId Int
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId      Int
+  author        Profile     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   publicationId Int
-  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade) 
+  publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }

@@ -3,12 +3,12 @@ services:
   dev-db:
     image: postgres:14
     ports:
-      - 5435:5432
+      - 5444:5432
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: 1556457Mm.
-      POSTGRES_DATABASE: business-project
+      POSTGRES_DB: road-mates-db
     networks:
-      - nested-minds
+      - RoadMates
 networks:
-  nested-minds:
+  RoadMates:

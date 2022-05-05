@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-
-//DATABASE_URL="postgres://hyhmguqnoxonqv:adf48699dc4dce25c3fc1b2b87d8052c1113ab50a656b867aae9aaba77e29e0f@ec2-44-194-92-192.compute-1.amazonaws.com:5432/d3epbkbdveop1p"
+import {PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
@@ -12,4 +10,16 @@ export class PrismaService extends PrismaClient {
             }
         });
     }
+
+    async deleteExpiredData(getCallBack: (params: any) => any[] | any, deleteCallBack: (params: any) => any) {
+        const now: Date = new Date();
+        const items: any[] = await getCallBack({});
+        for (let index = 0; index < items.length; index++) {
+            const item: any = items[index];
+            if (item.expiredAt <= now) await deleteCallBack({
+                where: { id: item.id }
+            });
+        }
+    }
+
 }

@@ -1,19 +1,23 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from 'src/auth/auth.module';
-import { CommentModule } from 'src/comment/comment.module';
-import { PrismaModule } from 'src/prisma/prisma.module';
-import { PublicationModule } from 'src/publication/publication.module';
-import { UserModule } from 'src/user/user.module';
+import {ConfigModule} from "@nestjs/config";
+import {PrismaModule} from "../prisma/prisma.module";
+import {UserModule} from "../user/user.module";
+import {AuthModule} from "../auth/auth.module";
+import {MailModule} from "../mail/mail.module";
+import {ProfileModule} from "../profile/profile.module";
+import {PublicationModule} from "../publication/publication.module";
+import { LikeModule } from 'src/like/like.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env'
-    }),
-    AuthModule, PrismaModule, UserModule,
-    PublicationModule, CommentModule
+      ConfigModule.forRoot({
+          isGlobal: true,
+          envFilePath: '.env'
+      }),
+      PrismaModule, MailModule,
+      AuthModule, UserModule,
+      ProfileModule, PublicationModule,
+      LikeModule
   ]
 })
 export class AppModule {}
